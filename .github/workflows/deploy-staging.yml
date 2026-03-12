@@ -1,0 +1,19 @@
+name: Deploy Staging
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Simulate deployment
+        run: |
+          echo "Deploying commit $GITHUB_SHA to staging environment"
