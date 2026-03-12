@@ -1,0 +1,32 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR title format
+        run: |
+          title="${{ github.event.pull_request.title }}"
+          echo "PR Title: $title"
+          if [[ ${#title} -lt 10 ]]; then
+            echo "PR title is too short"
+            exit 1
+          fi
+
+      - name: Check branch naming
+        run: |
+          branch="${{ github.head_ref }}"
+          echo "Branch: $branch"
+          if [[ ! "$branch" =~ ^(feature|bugfix|chore|hotfix)/.+$ ]]; then
+            echo "Branch name must start with feature/, bugfix/, chore/, or hotfix/"
+            exit 1
+          fi
